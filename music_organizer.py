@@ -1,11 +1,11 @@
 from __future__ import print_function
 import os
 import sys
-import tinytag
 import pickle
 import argparse
-from tinytag import TinyTag
 import shutil
+from tinytag import TinyTagException
+from tinytag import TinyTag
 
 # ----------------------- Function definition section -------------------------- #
 
@@ -36,7 +36,7 @@ def scanToDB(path,db):
 						db[key].append(os.path.join(root,elem))
 					else:
 						db[key] = [os.path.join(root,elem)]
-				except tinytag.TinyTagException as err:
+				except TinyTagException as err:
 					eprint('Tag Error:', err)
 				except Exception as e:
 					eprint('Error:', str(e), '>file:', elem)
