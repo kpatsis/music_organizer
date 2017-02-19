@@ -7,7 +7,7 @@ import argparse
 from tinytag import TinyTag
 import shutil
 
-# ------------Function definition section--------------------#
+# ----------------------- Function definition section -------------------------- #
 
 def eprint(*args, **kwargs):
     print(*args, file=sys.stderr, **kwargs)
@@ -40,28 +40,14 @@ def scanToDB(path,db):
 					eprint('Tag Error:', err)
 				except Exception as e:
 					eprint('Error:', str(e), '>file:', elem)
-
-#def scanToDB_old(path,filename,db):
-#	if filename.endswith('.m4a') or filename.endswith('.mp3') or filename.endswith('.flac'):
-#		try:
-#			tag = TinyTag.get(os.path.join(path,filename))
-#			artist = removeNonAscii(tag.artist).strip(' ,')
-#			album = removeNonAscii(tag.album).strip(' ,')
-#			key = ''.join([artist,' - ',album])
-#			if db.has_key(key):
-#				db[key].append(os.path.join(path,filename))
-#			else:
-#				db[key] = [os.path.join(path,filename)]
-#		except tinytag.TinyTagException as err:
-#			eprint('Tag Error:', err)
-#		except Exception as e:
-#			eprint('Error:', str(e), 'file:', elem)
 			
 def organizeFiles(db,outpath):
 	for key in db.keys():
 		dirpath = os.path.join(outpath,key)
 		if os.path.exists(dirpath):
-			eprint('Warning: directory ', ''.join(['\'',dirpath,'\'']), 'already exists. To ensure that no data is being overwritten, this directory is skipped.')
+			eprint('Warning: directory ', ''.join(['\'',dirpath,'\'']), 
+				('already exists. To ensure that no data is being overwritten, '
+				'this directory is skipped.') )
 			continue
 		else:
 			print('Creating directory', ''.join(['\'',dirpath,'\'.']))
@@ -69,8 +55,10 @@ def organizeFiles(db,outpath):
 			for elem in db[key]:
 				# prepare filename
 				filename = removeNonAscii(os.path.split(elem)[1])
-				print('Copying', ''.join(['\'',elem,'\'']), 'to', ''.join(['\'',os.path.join(dirpath,filename),'\'.']))				
-				shutil.copy2(elem,os.path.join(dirpath,filename))
+				fullpath = os.path.join(dirpath,filename)
+				print('Copying', ''.join(['\'',elem,'\'']), 'to', 
+					''.join(['\'',fullpath,'\'.']))				
+				shutil.copy2(elem,fullpath)
 			
 def printDB(db):
 	for key in db.keys():
@@ -78,18 +66,31 @@ def printDB(db):
 		for elem in sorted(db[key]):
 			print('\t',elem)
 			
-# -------------------Main section----------------------------#
+# ------------------------------ Main section ---------------------------------- #
 
 # Setup argument parser
-parser = argparse.ArgumentParser(description='Audio file organizer. Recursively scans for audio files (supported formats: .flac, .mp3, .m4a) in the specified folder and organizes them according to the \'artist\' and \'album\' tag.')
-parser.add_argument('path',help='Path of the directory to scan for audio files. If the \'-b\' option is used, the list is loaded directly from the binary file (.plk)')
-parser.add_argument('-p',action='store_true',help='Print organized audio file list')
-parser.add_argument('-b',action='store_true',help='Don\'t scan directory but load the organized list from a previously created (with \'-s\' option) binary file (.plk)')
-parser.add_argument('-s',metavar='file',help='Save organized list into a pickle <file>')
-parser.add_argument('-c',metavar='dir',help='Create directories in <dir> according to the organized list and copy the appropriate audio files in it. <dir> must exist')
+parser = argparse.ArgumentParser(
+	description=('Audio file organizer. Recursively scans for audio files '
+	'(supported formats: .flac, .mp3, .m4a) in the specified folder and organizes'
+	' them according to the \'artist\' and \'album\' tag.'))
+parser.add_argument('path',
+	help=('Path of the directory to scan for audio files. If the \'-b\' option is '
+	'used, the list is loaded directly from the binary file (.plk)'))
+parser.add_argument('-p',
+	action='store_true',
+	help='Print organized audio file list')
+parser.add_argument('-b',
+	action='store_true',
+	help=('Don\'t scan directory but load the organized list from a previously '
+	'created (with \'-s\' option) binary file (.plk)'))
+parser.add_argument('-s',
+	metavar='file',
+	help='Save organized list into a pickle <file>')
+parser.add_argument('-c',
+	metavar='dir',
+	help=('Create directories in <dir> according to the organized list and copy the'
+	' appropriate audio files in it. <dir> must exist'))
 args = parser.parse_args()
-#parser.print_help()
-#print(args)
 
 # Create empty DB dictionary
 db = {}
@@ -105,7 +106,9 @@ else: # Scan given directory
 	if os.path.exists(args.path):
 		scanToDB(args.path,db)
 	else:
-		eprint('Specified directory', ''.join(['\'',args.path,'\'']), 'does not exist. Please specify an existing directory and try again.')
+		eprint('Specified directory', ''.join(['\'',args.path,'\'']), 
+			'does not exist. Please specify an existing directory and try again.')
+		exit()
 	
 
 # Check -s option
@@ -126,7 +129,9 @@ if args.c:
 	if os.path.exists(outpath):
 		organizeFiles(db,outpath)
 	else:
-		eprint('Specified directory', ''.join(['\'',outpath,'\'']), 'does not exist. Please specify an existing directory and try again.')
+		eprint('Specified directory', ''.join(['\'',outpath,'\'']), 
+			'does not exist. Please specify an existing directory and try again.')
+		exit()
 	
 		
 
