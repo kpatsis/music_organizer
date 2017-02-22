@@ -98,7 +98,7 @@ db = {}
 # Check -b option	
 if args.b: # Read from .plk file
 	if not args.path.endswith('.pkl'):
-		eprint('binary input file should be of \'pickle\' format (.plk)')
+		eprint('Error: Binary input file should be of \'pickle\' format (.plk)')
 		exit()
 	else:
 		db = loadDB(args.path)
@@ -106,7 +106,7 @@ else: # Scan given directory
 	if os.path.exists(args.path):
 		scanToDB(args.path,db)
 	else:
-		eprint('Specified directory', ''.join(['\'',args.path,'\'']), 
+		eprint('Error: Specified directory', ''.join(['\'',args.path,'\'']), 
 			'does not exist. Please specify an existing directory and try again.')
 		exit()
 	
@@ -114,7 +114,7 @@ else: # Scan given directory
 # Check -s option
 if args.s: 
 	if not args.s.endswith('.pkl'):
-		eprint('binary output file should be of \'pickle\' format (.plk)')
+		eprint('Error: Binary output file should be of \'pickle\' format (.plk)')
 		exit()
 	else:
 		saveDB(db,args.s)
