@@ -126,17 +126,4 @@ class MusicOrganizer:
 					print('Copying', ''.join(['\'',elem,'\'']), 'to', 
 						''.join(['\'',fullpath,'\'.']))				
 					shutil.copy2(elem,fullpath)
-					
-					
-				
-				
-
-		    
-mo = MusicOrganizer()
-
-mo.scanDirTree('testfolder')
-mo.printDB()
-mo.organizeFiles('outputfolder',force_dir_merge=True,move=True)
-
-#mo.printDB('folderlist.txt')
 

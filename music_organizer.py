@@ -2,8 +2,7 @@ from __future__ import print_function
 from MusicOrganizer import eprint
 from MusicOrganizer import MusicOrganizer
 import argparse
-			
-# ------------------------------ Main section ---------------------------------- #
+		
 
 # Setup argument parser
 parser = argparse.ArgumentParser(
@@ -41,6 +40,7 @@ parser.add_argument('-f',
 	' and continues with the next (if any).'))
 args = parser.parse_args()
 
+# Create MusicOrganizer instance
 mo = MusicOrganizer()
 
 # Handle src argument
