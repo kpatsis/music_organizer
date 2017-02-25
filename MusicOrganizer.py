@@ -58,12 +58,12 @@ class MusicOrganizer:
 		
 		if self.show_year and tag.year:
 			year_tag = removeNonAscii(tag.year).strip(' ,')
-			dirname.append(''.join(['(',year_tag,')','']))
+			dirname.append(''.join([' (',year_tag,')']))
 		
 		if self.show_type:
 			ext = os.path.splitext(filename)[1][1:].upper()
 			if ext != 'MP3':
-				dirname.append(''.join(['[',ext,']']))		
+				dirname.append(''.join([' [',ext,']']))		
 			
 		return ''.join(dirname).strip()
 				 
